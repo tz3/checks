@@ -60,3 +60,7 @@ def parse_qr_string(line: pyzbar.Decoded) -> tuple:
     fiscal_document = i
     fiscal_sign = fp
     return fiscal_number, fiscal_document, fiscal_sign
+
+
+def parse_items(api_data: dict) -> list:
+    return api_data.get('document', {}).get('receipt', {}).get('items', [])
