@@ -4,11 +4,14 @@ import pyzbar.pyzbar as pyzbar
 from requests import Response
 import cv2
 import requests
+from requests.auth import HTTPBasicAuth
 
 BASE_URL = 'https://proverkacheka.nalog.ru:9999/v1'
 authorize_data = {"email": "email", "name": "name", "phone": "phone"}
 username = authorize_data['phone']
+password = 1231231
 image_path = 'IMAGE 2019-04-06 13:16:58.jpg'
+auth = HTTPBasicAuth(username.encode('utf-8'), password)
 
 
 def sign_up(email: str, name: str, phone: str) -> Response:
@@ -19,11 +22,10 @@ def sign_up(email: str, name: str, phone: str) -> Response:
     return response
 
 
-def sign_in(username: str, password: str) -> Response:
-    username = username.encode('utf-8')
+def sign_in(auth: HTTPBasicAuth) -> Response:
     sign_in_url = '/mobile/users/login'
     url = BASE_URL + sign_in_url
-    response = requests.get(url, auth=(username, password))
+    response = requests.get(url, auth=auth)
     return response
 
 
@@ -35,12 +37,11 @@ def reset_password(phone: str) -> Response:
     return response
 
 
-def get_information(username: str, password: str, fiscal_number: str, fiscal_document: str,
+def get_information(auth: HTTPBasicAuth, fiscal_number: str, fiscal_document: str,
                     fiscal_sign: str) -> Response:
-    username = username.encode('utf-8')
     url = BASE_URL + f'/inns/*/kkts/*/fss/{fiscal_number}/tickets/{fiscal_document}?fiscalSign={fiscal_sign}&sendToEmail=no'
     headers = {"device-id": '', 'device-os': ''}
-    response = requests.get(url, auth=(username, password), headers=headers)
+    response = requests.get(url, auth=auth, headers=headers)
     return response
 
 
