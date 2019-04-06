@@ -1,15 +1,22 @@
 # -*- coding: utf-8 -*-
 
+import configparser
+
 import pyzbar.pyzbar as pyzbar
 from requests import Response
 import cv2
 import requests
 from requests.auth import HTTPBasicAuth
 
-BASE_URL = 'https://proverkacheka.nalog.ru:9999/v1'
-authorize_data = {"email": "email", "name": "name", "phone": "phone"}
-username = authorize_data['phone']
-password = 1231231
+config = configparser.ConfigParser()
+config.read('config.ini')
+email = config['Auth']['email']
+name = config['Auth']['name']
+phone = config['Auth']['phone']
+username = phone
+password = config['Auth']['password']
+BASE_URL = config['Auth']['base_url']
+authorize_data = {"email": email, "name": name, "phone": phone}
 image_path = 'IMAGE 2019-04-06 13:16:58.jpg'
 auth = HTTPBasicAuth(username.encode('utf-8'), password)
 
